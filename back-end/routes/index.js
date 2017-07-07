@@ -11,11 +11,37 @@ var connection = mysql.createConnection({
 connection.connect();
 
 
-router.get('/getTasks', function(req, res, next) {
-	connection.query('SELECT * FROM tasks', (error, results)=>{
-		if (error) throw error;
-		res.json(results);
+function validateKey(key){
+	console.log(key)
+	return new Promise((resolve, reject)=>{
+		connection.query('SELECT * FROM api_keys WHERE api_key="'+key+'"', (error, results)=>{
+			console.log(results.length)
+			if (error) throw error;
+			if (results.length == 0){
+				resolve(false);
+			}else{
+				resolve(true);
+			}
+		});
 	});
+}
+
+router.get('/getTasks', function(req, res, next) {
+	var isKeyValid = validateKey(req.query.api_key);
+	isKeyValid.then((bool)=>{
+		if(bool == true){
+			connection.query('SELECT * FROM tasks', (error, results)=>{
+				if (error) throw error;
+				res.json(results);
+			})
+
+		}else{
+			res.json({msg:"badKey"})
+		}
+
+	});
+
+});
   // res.json({
   // 	students: [
   // 			"Marissa",
@@ -27,7 +53,7 @@ router.get('/getTasks', function(req, res, next) {
   // 	]
 
   // })
-});
+
 
 router.get('/getTask/:id', (req,res)=>{
 	connection.query(`SELECT * FROM tasks WHERE id=${req.params.id}`, (error, results)=>{

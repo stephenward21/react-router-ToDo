@@ -15,7 +15,7 @@ class Home extends Component{
   // compondentDidMount runs AFTER the first render
   componentDidMount() {
     // getJSON request to localhost:3000 ... that's where Express is listening
-    $.getJSON('http://localhost:3000/getTasks', (tasksFromApi)=>{
+    $.getJSON('http://localhost:3000/getTasks?api_key=abcdefg', (tasksFromApi)=>{
       // log the JSON response from Express
       console.log(tasksFromApi)
       this.setState({
@@ -45,7 +45,7 @@ class Home extends Component{
 
 	    $.ajax({
 	      method: "POST",
-	      url: "http://localhost:3000/addTask",
+	      url: "http://localhost:3000/addTask?api_key=abcdefg",
 	      data: {
 	      	taskName: newTask,
 	      	taskDate: newTaskDate,
