@@ -10,6 +10,7 @@ class Home extends Component{
 			taskList: []
 		}
 		this.addNewTask = this.addNewTask.bind(this)
+		this.checkCompleted = this.checkCompleted.bind(this)
 	}
 
   // compondentDidMount runs AFTER the first render
@@ -67,18 +68,24 @@ class Home extends Component{
 	    this.state.taskList.map((task,index)=>{
 	      // push an li tag onto our array for each element in the state var
 	      taskArray.push(
-	      	<div className="table" key={index}>
-                    <Link to={`/task/read/${task.id}`}>
-                        <div className="col-sm-2 col-sm-offset-2">{task.taskName}</div>
-                    </Link>
-                    <div className="col-sm-2">{task.taskDate}</div>
-                    <Link to={`/task/delete/${task.id}`}>
-                        <div className="col-sm-2">Delete</div>
-                    </Link>
-                    <Link to={`/task/edit/${task.id}`}>
-                        <div className="col-sm-2">Edit</div>
-                    </Link>
-                </div> 
+	      	<tr key={index}>
+	      		<td><input checked={finished} className="circle-check" onChange={()=>{this.checkCompleted(task.id)}} type="checkbox" /><label htmlFor="circle-check" /></td>
+	      		<td><Link style={inlineStyle} to={`/task/get/${task.id}`}>{task.task_name}</Link></td>
+	      		<td><Link to={`/task/delete/${task.id}`}>Delete</Link></td>
+	      		<td><Link to={`/task/edit/${task.id}`}>Edit</Link></td>
+	      	</tr>);
+	      	// <div className="table" key={index}>
+        //             <Link to={`/task/read/${task.id}`}>
+        //                 <div className="col-sm-2 col-sm-offset-2">{task.taskName}</div>
+        //             </Link>
+        //             <div className="col-sm-2">{task.taskDate}</div>
+        //             <Link to={`/task/delete/${task.id}`}>
+        //                 <div className="col-sm-2">Delete</div>
+        //             </Link>
+        //             <Link to={`/task/edit/${task.id}`}>
+        //                 <div className="col-sm-2">Edit</div>
+        //             </Link>
+        //         </div> 
 
 	      );
 	    });		
