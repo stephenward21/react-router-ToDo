@@ -59,6 +59,22 @@ class Home extends Component{
 	    })		
 	}
 
+	checkCompleted(targetId){
+		console.log(targetId)
+	    $.ajax({
+	      method: "POST",
+	      url: "http://localhost:3000/completeTask?api_key=abcdefg",
+	      data: {
+	      	targetId: targetId
+	      }
+	    }).done((tasksArray)=>{
+	    	console.log(tasksArray)
+	      this.setState({
+	        taskList: tasksArray
+	      })
+	    })			
+	}
+
 	render(){
 
 	    // Create an array to dump into our return. It will contain
@@ -66,6 +82,16 @@ class Home extends Component{
 	    var taskArray = [];
 	    // Loop throuhg our state var. The frist time through, it will be empty
 	    this.state.taskList.map((task,index)=>{
+	    	console.log(task)
+	    	var inlineStyle = {}
+	    	var finished = 0;
+	    	if (task.finished == 1){
+			    inlineStyle = {
+			    	"textDecoration": "line-through",
+			    	"color": "black"
+			    }
+			    finished = true;
+	    	}
 	      // push an li tag onto our array for each element in the state var
 	      taskArray.push(
 	      	<tr key={index}>
@@ -87,7 +113,7 @@ class Home extends Component{
         //             </Link>
         //         </div> 
 
-	      );
+	      
 	    });		
 
 		return(
@@ -96,22 +122,28 @@ class Home extends Component{
 		           <img src={logo} className="App-logo" alt="logo" />
 		          <h2>Welcome to React</h2>
 		        </div>
-		        <p className="App-intro">
-		         
-		        </p>
+		        <div className="container">
+			        <form onSubmit={this.addNewTask} className="add-box">
+			          <input type="text" id="new-task" placeholder="New Task..."/>
+			          <input type="date" id="new-task-date" />
+			          <button type="submit" className="btn btn-primary">Add Task</button>
+			        </form>
 
-
-		        <form onSubmit={this.addNewTask} className="add-box">
-		          <input type="text" id="new-task" placeholder="New Task..."/>
-		          <input type="date" id="new-task-date" />
-		          <input type="text" id="new-task-info" placeholder="New Task Info..."/>
-		          <button type="submit" className="btn btn-primary">Add Task</button>
-		        </form>
-
-		        <p>
-		          {taskArray}
-		        </p>
-		      </div>
+			        <table className="table table-bordered">
+			        	<thead>
+			        		<tr>
+				        		<th>Completed</th>
+				        		<th>Task</th>
+				        		<th>Delete</th>
+				        		<th>Edit</th>
+				        	</tr>
+			        	</thead>
+			        	<tbody>
+			          		{taskArray}
+			          	</tbody>
+			        </table>
+			      </div>
+			    </div>
 		)
 	}
 
